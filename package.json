@@ -1,0 +1,30 @@
+{
+  "name": "youyo",
+  "version": "1.0.0",
+  "description": "WebSocket Wrapper for WS library",
+  "main": "YouYo.js", 
+  "dependencies": {
+    "ws": ">=1.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mhgolkar/YouYo.git"
+  },
+  "keywords": [
+    "WS",
+    "WebSocket",
+    "Wrapper",
+    "Abstraction",
+    "YouYo"
+  ],
+  "author": "Morteza H. Golkar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mhgolkar/YouYo/issues"
+  },
+  "homepage": "https://github.com/mhgolkar/YouYo#readme"
+}
