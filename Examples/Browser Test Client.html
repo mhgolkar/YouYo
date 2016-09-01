@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<head>
+    <style>
+        *{
+            font-family: sans-serif;
+        }
+        #output{
+            font-size: small;
+            padding-top: 10px;
+            padding-bottom: 20px;
+            text-indent: 10px;
+            display:block;
+            height: 300px;
+            width: 90%;
+            background-color: #100028;
+            color:white;
+            overflow: scroll;
+        }
+        #output hr {
+            border: 0.5px dashed;
+            border-color: darkslateblue;
+            
+        }
+        #output p {
+            margin: 0;
+            margin-top: 1px;
+        }
+        #form{
+            margin-top: 5px;
+            width: 50%;
+        }
+        input {margin-top: 2px;}
+    </style>
+</head>
+<body>
+<meta charset="utf-8" />
+<title>WebSocket Test Client</title>
+	<script language="javascript" type="text/javascript">
+
+		//var wsUri = "ws://echo.websocket.org/";
+		var output, url, protocol;
+
+		function init(){
+			output = document.getElementById("output");
+            url = document.getElementById("path").value;
+            var toJase = document.getElementById("prots").value || false;
+            var xyz = document.getElementById("xyz").value;
+            if(toJase == 'xyz' && xyz != "" && xyz != " ") { toJase = []; toJase.push(xyz) } else if(toJase == 'xyz') toJase = null;
+            if( Array.isArray(toJase) ){
+                protocol = (toJase != [""] && toJase != [" "]) ? toJase : false;
+            } else protocol = toJase != "" ? JSON.parse(toJase) || false : false;
+            console.log(protocol)
+            if(protocol) {
+                ws = window['MozWebSocket'] ? new MozWebSocket(url, protocol) : new WebSocket(url, protocol);
+            } else {
+                ws = window['MozWebSocket'] ? new MozWebSocket(url) : new WebSocket(url);
+            }
+			ws.onopen = function(evt) { onOpen(evt) };
+			ws.onclose = function(evt) { onClose(evt) };
+			ws.onmessage = function(evt) { onMessage(evt) };
+			ws.onerror = function(evt) { onError(evt) };
+			
+		}
+		function onOpen(evt){
+			writeToScreen("<p style='color:#fe8e39;'>↯ "+ url +"</p>");
+			writeToScreen("<p style='color:#fe8e39;'>Connected ✔</p><br/>");
+            //doSend('To Test WebSocket ✈');
+		}
+		function onClose(evt){
+			writeToScreen("<p style='color:#fe8e39;'>✂ Disconnected</p><hr/>");
+		}
+		function onMessage(evt){
+            if(evt.data.indexOf("said:") == -1) writeToScreen('<p style="color: #b186fd;"> ▼ ' + evt.data +'</p>');
+            else writeToScreen('<p style="color: #24f3e2;"> ▼ ' + evt.data.replace("said:",": ")+'</p>');
+		}
+		function onError(evt){
+            var error = (evt && evt.data) ? evt.data : "Please Check Server [path] & [Sub-]Protocol";
+			writeToScreen('<p style="color: Yellow;">✘ Error: '+ error +'</p>');
+		}
+		function doSend(_message){
+			var message = _message ? _message : document.querySelector('#Message').value;
+			writeToScreen(" ▲ " + message);
+            ws.send(message);
+		}
+		function doSendBinary(type){
+            var blob = document.getElementsByName("file")[0].files[0];
+            if(type){
+                ws.binaryType = "blob";
+                ws.send(blob);
+                writeToScreen(" ♣ Blob Buffer Sent ");
+            } else {
+                var fileReader = new FileReader();
+                fileReader.readAsArrayBuffer(blob);
+                fileReader.onload = function () {
+                    writeToScreen(" ♠ Array Buffer Sent");
+                    ws.binaryType = "arraybuffer";
+                    ws.send(fileReader.result);
+                }
+                fileReader.onerror = function () {
+                    writeToScreen('<p style="color: Yellow;">✘ Error : Unable to Read File As Array Buffer</p>');
+                }
+            }
+        }
+		function writeToScreen(message){
+			var pre = document.createElement("p");
+			pre.style.wordWrap = "break-word";
+			pre.innerHTML = message;
+			output.appendChild(pre);
+            output.scrollTop = output.scrollHeight;
+		}
+
+		// window.addEventListener("load", init, false);
+	</script>
+    <!-- Forms etc -->
+	<p><strong>WebSocket Client</strong><br/> <small>Browser Test For YouYo!</small></p>
+    <!-- Server Form -->
+    <form>
+        Server: <input type=text id="path" value='ws://localhost/'>
+        <input type="button" value="Init" onclick="javascript: init()">
+        <input type="button" value="Close" onclick="javascript: ws.close()"><br/>
+        Protocol:  <select id='prots'>
+                      <option value='["chatroom","echo"]'>["chatroom","echo"]</option>
+                      <option value='["echo"]'>["echo"]</option>
+                      <option value="">No Sub-Protocol</option>
+                      <option value="xyz">XYZ</option>
+                    </select>
+        XYZ: <input type=text id="xyz" value='' placeholder="which sub-protocol">
+    </form><br/>
+    <!-- Console -->
+	<div id="output"></div>
+    <form id="form">
+        <fieldset>
+            <legend>Socket Console</legend>
+            <input type="text" id="Message" style="text-indent:0.5em" value="Let's YouYo!">
+            <input type="submit" value="Send">
+            <input type="button" value="Clear" onclick="javascript: output.innerText = ''; "><br/>
+            <lable>Send Binary: </lable><br/>
+            <input type="file" name='file'>
+            <input type="button" value="blob" onclick="javascript: doSendBinary(true)">
+            <input type="button" value="array" onclick="javascript: doSendBinary(false)">
+        </fieldset>
+    </form>
+    <script>
+        document.getElementById("form").addEventListener("submit", function(event){
+            event.preventDefault();
+            doSend();
+        });
+    </script>
+</body> 
