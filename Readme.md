@@ -8,11 +8,11 @@ WebSocket Wrapper for [WS](https://github.com/websockets/ws) library
 
 ### Getting Started
 #### Installation
-YouYo! is released on npm and can be installed using:
 ```
 npm install youyo --save
 ```
-YouYo is dependent on [ws](https://www.npmjs.com/package/ws) package.
+YouYo is dependent on [ws](https://www.npmjs.com/package/ws) package.  
+
 #### Usage (Practice A)
 1. Require: `const YouYo = require('YouYo')`.
 2. Createing a YouYo Definer Object:
@@ -76,14 +76,14 @@ Instance of `YouYo` (yoo):
 * `.compress`: Compressing data frames? (False)
 * `.cpip`: Connections per ip (3)
 * `.ppi`: Automatic Ping/Pong intervals (Default: 1 minutes)
-* `.pol`: At Least x Milliseconds Before Next Pong (Default: 1 Minutes)
+* `.pol`: At Least Waite x Milliseconds Before Next Pong (Default: 1 Minutes)
 * `.pil`: x Missed Pings Toleration Limit (2)
 * `.bpl`: Max Bad Pings Limit >> client sends too much pings related to last pong and `.pol` (5)
 * `.dosLimit`: After n Wrong Attempts >> Possibly attacker (3)
 * `.dosTimer`: Delay for Next Handshake (after n wrong attempts) - Milliseconds (Default 1 Minutes)
 * `.freePath`: Accept connection to any path? [Boolean]
 * `.origins` = []; // accepted origins (Empty Array == Any)   
-* `.secure` [Boolean] true if `req.connection.authorized` or `req.connection.encrypted` should be set to verify client.
+* `.secure` [Boolean] true if `req.connection.authorized` or `req.connection.encrypted` should be setted to verify client.
 * Ws[s] Options:
   * `.disableHixie` // true;
   * `.clientTracking` // true;
@@ -99,14 +99,14 @@ Instance of `yo` (YouYo socket):
 * `.broadcastPrtcl(data, options)` // to All Other Clients [of related path & protocol]
 * `.ws`  [this websocket]
 * `.wss` [related server]
-* `.wss.broadcast(data, options)` // to All Clients of server (port)
+* `.wss.broadcast(data, options)` // to All Clients of the server (port)
 * `.wss.sendTo(user_id_in_server, data, option, cb)`
 
 ### Events
 Instance of `YouYo` is Event Emitter:
 * `established`: Socket Connection Established. Passes socket `yo`.  
-* `signed`: Socket id had been set. Passes id and socket `yo`.  
-* `message`: Recived data is ready to use. passes socket `yo`, data & flags (binary[boolean], masked[boolean], buffer).  
-* `closed`: Socket's completely closed; Destroyed. passes related server, socket id, status code & message.  
-* `server-error`: passes error and websocket-server (istance of wss).  
-* `socket-error`: passes error and socket `yo`.  
+* `signed`: Socket id had been setted. Passes id and socket `yo`.  
+* `message`: Received data is ready to use. Passes socket `yo`, data & flags (binary[boolean], masked[boolean], buffer).  
+* `closed`: Socket's completely closed; Destroyed. Passes related server, socket id, status code & message.  
+* `server-error`: Passes error and websocket-server (Instance of wss).  
+* `socket-error`: Passes error and socket `yo`.  
