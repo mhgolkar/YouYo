@@ -1,4 +1,7 @@
 # YouYo!
+
+## [ deprecated ]
+
 WebSocket Wrapper for [WS](https://github.com/websockets/ws) library
 * Minimalist
 * Dynamic Sub-Protocols
